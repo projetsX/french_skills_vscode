@@ -1,0 +1,13 @@
+# Fichier d'environnement (contient des clés API sensibles)
+.env
+!.env.example
+
+# Dossier des photos téléchargées
+photos_source/
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
