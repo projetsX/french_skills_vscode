@@ -1,0 +1,42 @@
+title = "Gitleaks config for projetsX/french_skills_vscode"
+description = "Règles basiques pour détecter clés et secrets courants dans le dépôt"
+
+[[rules]]
+description = "AWS Access Key ID"
+id = "aws-access-key-id"
+regex = '''AKIA[0-9A-Z]{16}'''
+tags = ["key", "aws"]
+
+[[rules]]
+description = "AWS Secret Access Key"
+id = "aws-secret-access-key"
+regex = '''(?i)aws(.{0,20})?(secret|secret_access_key).{0,20}([A-Za-z0-9/+=]{40})'''
+tags = ["key", "aws"]
+
+[[rules]]
+description = "Private key (RSA/OPENSSH/EC/DSA)"
+id = "private-key"
+regex = '''-----BEGIN (RSA |OPENSSH |EC |DSA )?PRIVATE KEY-----'''
+tags = ["key", "private_key"]
+
+[[rules]]
+description = "Slack token"
+id = "slack-token"
+regex = '''xox[baprs]-[0-9a-zA-Z-]+'''
+tags = ["token", "slack"]
+
+[[rules]]
+description = "Generic API key / high entropy tokens"
+id = "generic-api-key"
+regex = '''(?i)(api[_-]?key|secret|token).{0,20}([A-Za-z0-9-_]{32,})'''
+tags = ["key", "generic"]
+
+[[rules]]
+description = "Basic auth (user:pass@host)"
+id = "basic-auth-userpass"
+regex = '''[A-Za-z0-9_.+-]+:[A-Za-z0-9_.+-]+@'''
+tags = ["credentials"]
+
+[allowlist]
+description = "Exclusions de chemins connus pour ce dépôt"
+paths = ["cleanup-unused-css/scripts/*", "refactor-css-mdn/scripts/*", ".*\\.md$"]
