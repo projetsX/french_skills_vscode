@@ -1,7 +1,7 @@
 ---
 name: cleanup-unused-css
 description: 'Analyze and remove unused CSS blocks from a website project. Use when: cleaning up CSS files, removing dead code, optimizing bundle size, comparing CSS classes with HTML files, generating CSS usage reports.'
-argument-hint: '[PAGES_FOLDER_PATH] [CSS_FOLDER_PATH] - Paths to HTML pages folder and CSS files folder'
+argument-hint: '[PROJECT_ROOT] [CSS_FOLDER_PATH] - Path to project root (scan entire site) and optional CSS folder. Exclude common third-party dirs: node_modules, vendor, phpmyadmin, bower_components, .git'
 user-invocable: true
 ---
 
@@ -29,28 +29,33 @@ Flux de travail procédural pour analyser une pile CSS, identifier les blocs inu
 
 ### Phase 1 : Analyse et découverte
 
-**1. Identifier les dossiers cibles**
+**1. Identifier les cibles et la racine du scan**
 
-- `[PAGES_FOLDER_PATH]` : Dossier contenant toutes les pages web du site (HTML, JSX, Vue, etc.)
-  - Exemple : `src/pages/`, `public/`, `app/`, `admin/pages/`
-  - Le script scannera UNIQUEMENT ce dossier pour économiser les tokens LLM
-- `[CSS_FOLDER_PATH]` : Dossier contenant tous les fichiers CSS du projet
+- `[PROJECT_ROOT]` : Chemin vers la racine du projet — le script scannera l'arborescence entière à partir de la racine
+  - Exemple : `.` ou `C:/repo/mon-projet`
+  - Le script parcourra récursivement la racine DU PROJET mais IGNORERA les répertoires tiers listés dans la section "Exclusions" ci-dessous
+- `[CSS_FOLDER_PATH]` : Dossier contenant tous les fichiers CSS du projet (optionnel si déduisible depuis la racine)
   - Exemple : `src/styles/`, `assets/css/`, `public/css/`
 
-**2. Scanner les pages web**
+**Remarque** : Par défaut on scanne depuis la racine du dépôt/projet afin de couvrir l'ensemble du site; pour éviter d'analyser de la librairie tierce, fournir la liste `-ExcludeDirs` (node_modules, vendor, phpmyadmin, etc.).
+
+**2. Scanner le site depuis la racine (avec exclusions)**
 
 ```bash
 # Le script va :
-# - Lister tous les fichiers HTML/JSX/Vue/etc. dans [PAGES_FOLDER_PATH]
-# - Extraire tous les noms de classes CSS trouvés
+# - Parcourir récursivement la racine du projet ([PROJECT_ROOT])
+# - Ignorer les répertoires tiers (node_modules, vendor, phpmyadmin, bower_components, .git, etc.)
+# - Extraire tous les noms de classes CSS trouvés dans les fichiers HTML/JSX/TSX/Vue/JS
 # - Créer une liste des classes utilisées dans le code
 ```
 
-**Exemple de commande PowerShell :**
+**Exemple de commande PowerShell (scan racine avec filtres d'exclusion) :**
 ```powershell
-# Scanner les pages pour les classes CSS
-Get-ChildItem -Path "src/pages" -Recurse -Include "*.html", "*.jsx", "*.tsx", "*.vue" |
-  Select-String -Pattern 'class=["\']([^"\']+)["\']' |
+# Scanner la racine en excluant les dossiers tiers (dry-run)
+$excludes = 'node_modules','vendor','phpmyadmin','bower_components','.git'
+Get-ChildItem -Path "." -Recurse -File -Include *.html,*.htm,*.js,*.jsx,*.ts,*.tsx,*.vue |
+  Where-Object { $p = $_.FullName; -not ($excludes | ForEach-Object { $p -like "*$_*" } | Where-Object { $_ }) } |
+  Select-String -Pattern 'class=["\\']([^"\\']+)["\\']' |
   ForEach-Object { $_.Matches.Groups[1].Value } |
   Sort-Object -Unique
 ```
@@ -223,8 +228,9 @@ css-backup-2026-03-10T143000Z/
 **Exemple d'exécution :**
 ```powershell
 .\scripts\cleanup-unused-css.ps1 `
-  -PagesFolder "src/pages" `
+  -ProjectRoot "." `
   -CssFolder "src/styles" `
+  -ExcludeDirs @('node_modules','vendor','phpmyadmin','bower_components','.git') `
   -GenerateReport `
   -CreateBackup `
   -ExecuteCleanup $false  # Dry-run par défaut
@@ -233,10 +239,11 @@ css-backup-2026-03-10T143000Z/
 **2. Exécuter en mode "dry-run" d'abord**
 
 ```powershell
-# Affiche ce qui SERAIT supprimé SAN effectuer les modifications
+# Affiche ce qui SERAIT supprimé SANS effectuer les modifications
 .\scripts\cleanup-unused-css.ps1 `
-  -PagesFolder "src/pages" `
+  -ProjectRoot "." `
   -CssFolder "src/styles" `
+  -ExcludeDirs @('node_modules','vendor','phpmyadmin','bower_components','.git') `
   -ExecuteCleanup $false
 ```
 
@@ -245,8 +252,9 @@ css-backup-2026-03-10T143000Z/
 ```powershell
 # Après vérification du rapport dry-run:
 .\scripts\cleanup-unused-css.ps1 `
-  -PagesFolder "src/pages" `
+  -ProjectRoot "." `
   -CssFolder "src/styles" `
+  -ExcludeDirs @('node_modules','vendor','phpmyadmin','bower_components','.git') `
   -ExecuteCleanup $true `
   -CreateBackup $true
 ```

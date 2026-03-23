@@ -10,6 +10,13 @@ This script performs a complete CSS cleanup workflow:
 4. Creates a backup before modifications
 5. Optionally removes unused CSS blocks
 
+.PARAMETER ProjectRoot
+Path to the project root. The script will scan recursively from this root (default: current directory).
+
+.PARAMETER ExcludeDirs
+
+Array of directory names to exclude from scanning (e.g. node_modules, vendor, phpmyadmin).
+
 .PARAMETER PagesFolder
 The folder containing HTML pages to scan for CSS classes.
 
@@ -46,6 +53,12 @@ param(
   [string]$CssFolder = "src/styles",
   
   [Parameter(Mandatory = $false)]
+  [string]$ProjectRoot = ".",
+
+  [Parameter(Mandatory = $false)]
+  [string[]]$ExcludeDirs = @('node_modules','vendor','phpmyadmin','bower_components','.git','dist','build'),
+  
+  [Parameter(Mandatory = $false)]
   [bool]$GenerateReport = $true,
   
   [Parameter(Mandatory = $false)]
@@ -69,7 +82,7 @@ $VerbosePreference = "Continue"
 
 # Script configuration
 $scriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
-$projectRoot = (Get-Location).Path  # Use current directory as project root
+$projectRoot = (Resolve-Path -Path $ProjectRoot).Path  # Use provided project root (or current directory)
 $timestamp = Get-Date -Format "yyyy-MM-ddTHHmmssZ"
 
 # Initialize variables
@@ -103,12 +116,14 @@ $cssClassPattern = '\.[a-zA-Z_-][a-zA-Z0-9_:-]*'
 
 function Resolve-SafePath {
   param([string]$Path)
-  
+
+  if ([string]::IsNullOrWhiteSpace($Path)) { return $null }
+
   if ([System.IO.Path]::IsPathRooted($Path)) {
-    return $Path
+    return (Resolve-Path -Path $Path).Path
   }
-  
-  return Join-Path $projectRoot $Path
+
+  return (Resolve-Path -Path (Join-Path $projectRoot $Path)).Path
 }
 
 Write-Log "======================================"
@@ -124,24 +139,34 @@ Write-Log "Safe Mode: $SafeMode"
 Write-Log "Confidence Threshold: $ConfidenceThreshold"
 Write-Log ""
 
-# Resolve paths
-$PagesFolder = Resolve-SafePath $PagesFolder
-$CssFolder = Resolve-SafePath $CssFolder
-
-if (!(Test-Path $PagesFolder)) {
-  Write-Log "ERROR: Pages folder not found: $PagesFolder"
+# Resolve paths and apply defaults
+if (-not (Test-Path $projectRoot)) {
+  Write-Log "ERROR: Project root not found: $projectRoot"
   exit 1
 }
 
-if (!(Test-Path $CssFolder)) {
-  Write-Log "ERROR: CSS folder not found: $CssFolder"
-  exit 1
-}
+if ($PagesFolder) { $PagesFolder = Resolve-SafePath $PagesFolder }
+else { Write-Log "Pages folder not provided; scanning content under project root"; $PagesFolder = $projectRoot }
+
+if ($CssFolder) { $CssFolder = Resolve-SafePath $CssFolder }
+else { Write-Log "CSS folder not provided; scanning for .css under project root"; $CssFolder = $projectRoot }
 
 Write-Log "Resolved paths:"
 Write-Log "  Pages: $PagesFolder"
 Write-Log "  CSS: $CssFolder"
+Write-Log "Exclude Dirs: $($ExcludeDirs -join ',')"
 Write-Log ""
+
+function Is-ExcludedPath {
+  param([string]$Path)
+
+  foreach ($ex in $ExcludeDirs) {
+    if ([string]::IsNullOrWhiteSpace($ex)) { continue }
+    if ($Path -ilike "*${ex}*") { return $true }
+  }
+
+  return $false
+}
 
 # ============================================
 # PHASE 1: Scan HTML pages for CSS classes
@@ -153,11 +178,12 @@ Write-Log "Looking for files: *.html, *.jsx, *.tsx, *.vue"
 $foundClasses = @{}
 
 try {
-  $htmlFiles = Get-ChildItem -Path $PagesFolder -Recurse -Include "*.html", "*.jsx", "*.tsx", "*.vue" -ErrorAction Continue
+  $htmlFiles = Get-ChildItem -Path $PagesFolder -Recurse -File -Include "*.html", "*.htm", "*.js", "*.jsx", "*.ts", "*.tsx", "*.vue" -ErrorAction Continue |
+    Where-Object { -not (Is-ExcludedPath $_.FullName) }
   $reportJson.pagesScanned = $htmlFiles.Count
-  
-  Write-Log "Found $($htmlFiles.Count) page files to scan"
-  
+
+  Write-Log "Found $($htmlFiles.Count) page files to scan (exclusions applied)"
+
   foreach ($file in $htmlFiles) {
     try {
       $content = Get-Content $file.FullName -Raw -ErrorAction Continue
@@ -197,7 +223,8 @@ Write-Log ""
 Write-Log "PHASE 2: Analyzing CSS files..."
 Write-Log "Analyzing: *.css (excluding *.min.css)"
 
-$cssFiles = Get-ChildItem -Path $CssFolder -Recurse -Include "*.css" -ErrorAction Continue
+$cssFiles = Get-ChildItem -Path $CssFolder -Recurse -File -Include "*.css" -ErrorAction Continue |
+  Where-Object { -not (Is-ExcludedPath $_.FullName) }
 $minifiedFiles = $cssFiles | Where-Object { $_.Name -match '\.min\.css$' }
 $regularCssFiles = $cssFiles | Where-Object { $_.Name -notmatch '\.min\.css$' }
 
