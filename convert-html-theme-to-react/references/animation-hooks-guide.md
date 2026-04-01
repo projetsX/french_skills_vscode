@@ -1,19 +1,19 @@
-# Guide des hooks d'animation
+# Animation Hooks Guide
 
-Schémas de migration pour convertir les animations jQuery/JavaScript des fichiers de thème en hooks React.
+Migration patterns for converting jQuery/JavaScript animations from theme files to React hooks.
 
-## Modèles d'animation courants
+## Common Animation Patterns
 
-### 1. Animation Fondu Entrée/Sortie
+### 1. Fade In/Out Animation
 
-**jQuery original :**
+**Original jQuery:**
 
 ```javascript
 $(".element").fadeIn(300);
 $(".element").fadeOut(300);
 ```
 
-**Implémentation via hook React :**
+**React Hook Implementation:**
 
 ```typescript
 // src/hooks/useAnimationFade.ts
@@ -56,7 +56,7 @@ export const useAnimationFade = (initialOpacity = 0) => {
 };
 ```
 
-**Utilisation dans un composant :**
+**Component Usage:**
 
 ```tsx
 const { opacity, fadeIn, fadeOut } = useAnimationFade();
@@ -72,9 +72,9 @@ return (
 );
 ```
 
-### 2. Animation Glissement (Slide)
+### 2. Slide Animation
 
-**jQuery original :**
+**Original jQuery:**
 
 ```javascript
 $(".element").slideDown(300);
@@ -127,9 +127,9 @@ export const useAnimationSlide = () => {
 };
 ```
 
-### 3. Basculement de classe (Toggle Class)
+### 3. Toggle Class Animation
 
-**jQuery original :**
+**Original jQuery:**
 
 ```javascript
 $(".element").toggleClass("is-active", 300);
@@ -137,7 +137,7 @@ $(".element").addClass("is-active");
 $(".element").removeClass("is-active");
 ```
 
-**Implémentation React (utilisant state + classes CSS) :**
+**React Implementation (using state + CSS classes):**
 
 ```typescript
 // src/hooks/useClassToggle.ts
@@ -174,9 +174,9 @@ return (
 );
 ```
 
-### 4. Animation avec délai et stagger
+### 4. Delay & Stagger Animation
 
-**jQuery original :**
+**Original jQuery:**
 
 ```javascript
 $(".item").each(function (i) {
@@ -215,9 +215,9 @@ export const useStaggerAnimation = (itemCount: number, delay = 100) => {
 };
 ```
 
-### 5. Gestionnaire d'événement de défilement (scroll)
+### 5. Scroll Event Handler
 
-**jQuery original :**
+**Original jQuery:**
 
 ```javascript
 $(window).on("scroll", function () {
@@ -249,24 +249,24 @@ export const useScrollDetection = (threshold = 100) => {
 };
 ```
 
-## Directives de conversion
+## Conversion Guidelines
 
-1. **État pour la visibilité** — Utiliser `useState` pour la logique show/hide
-2. **requestAnimationFrame pour des animations fluides** — Ne pas utiliser `setInterval` pour les animations
-3. **Nettoyage des effets** — Toujours enlever les listeners dans le retour de `useEffect`
-4. **Classes CSS pour le style** — Laisser le CSS du thème gérer l'apparence
-5. **Ref pour mesures DOM** — Utiliser `useRef` pour obtenir les dimensions d'un élément
-6. **Extraire en hooks réutilisables** — Ne pas dupliquer la logique d'animation dans les composants
+1. **State for visibility** - Use `useState` for show/hide logic
+2. **requestAnimationFrame for smooth animation** - Don't use setInterval for animations
+3. **Cleanup effects** - Always remove event listeners in useEffect cleanup
+4. **CSS classes for styling** - Let theme CSS handle the actual appearance
+5. **Ref for DOM measurement** - Use `useRef` to get element dimensions
+6. **Extract to reusable hooks** - Don't repeat animation logic in components
 
-## Considérations de performance
+## Performance Considerations
 
-- Utiliser `useCallback` pour éviter la recréation inutile de fonctions
-- Ajouter une `key` aux éléments de liste lors de l'utilisation d'animations en stagger
-- Envisager `useMemo` pour les calculs coûteux
-- Limiter (throttle) les gestionnaires de scroll dans `useScrollDetection` pour de meilleures performances
-- Nettoyer les intervals/timeouts pour éviter les fuites mémoire
+- Use `useCallback` to prevent unnecessary hook function recreations
+- Add `key` to list items when using stagger animations
+- Consider `useMemo` for expensive calculations
+- Throttle scroll handlers in useScrollDetection for better performance
+- Clean up intervals/timeouts to prevent memory leaks
 
-## Tester les hooks
+## Testing Hooks
 
 ```typescript
 import { renderHook, act } from "@testing-library/react";

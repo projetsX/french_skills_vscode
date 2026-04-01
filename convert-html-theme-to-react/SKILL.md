@@ -5,43 +5,27 @@ argument-hint: '[THEME_FOLDER_PATH] - Path to the HTML/CSS theme source files'
 user-invocable: true
 ---
 
-# Convertir un thème HTML en composants React
+# Convert HTML Theme to React Components
 
-Flux de travail procédural pour migrer des thèmes HTML/CSS vers des composants React modulaires en conservant le style et la logique d'animation basée sur des hooks.
+Procedural workflow for migrating HTML/CSS themes into modular React components with preserved styling and hook-based animation logic.
 
-## Quand l'utiliser
+## When to Use
 
-- Importer un thème HTML/CSS complet dans un projet React
-- Convertir un balisage HTML statique en une bibliothèque de composants réutilisables
-- Migrer des animations JavaScript/jQuery vers des hooks React
-- Assurer la cohérence visuelle avec le design du thème original
-- Décomposer des fichiers de composants volumineux en modules maintenables
+- Importing a complete HTML/CSS theme into the React project
+- Converting static HTML markup into reusable component library
+- Migrating JavaScript/jQuery animations to React hooks
+- Ensuring visual consistency with original theme design
+- Need to decompose large component files into maintainable modules
 
-## Prérequis
+## Prerequisites
 
-- Fichiers source HTML/CSS du thème avec la structure complète des assets
-- Connaissance des noms de classes CSS et de la mise en page du thème original
-- Compréhension des animations ou interactions présentes dans le JavaScript du thème
+- Source HTML/CSS theme files with complete asset directory structure
+- Knowledge of original CSS class naming and theme layout
+- Understanding of animations or interactions in the theme JavaScript
 
-## Exécution du script d'initialisation
+## Step-by-Step Procedure
 
-Un script d'initialisation est fourni pour créer rapidement la structure de répertoires requise.
-
-- Linux / macOS (Bash) :
-```
-bash scripts/theme-to-react-setup.sh [THEME_NAME] [TARGET_PATH]
-```
-
-- Windows (PowerShell) :
-```
-PowerShell -ExecutionPolicy Bypass -File scripts/theme-to-react-setup.ps1 -ThemeName "bootstrap" -ThemePath "."
-```
-
-Les arguments sont optionnels : `THEME_NAME` (par défaut `bootstrap`) et `TARGET_PATH` (par défaut `.`).
-
-## Procédure étape par étape
-
-### Phase 1 : Organisation des assets
+### Phase 1: Asset Organization
 
 1. **Create assets subdirectory** in `src/assets/`
    ```
@@ -52,30 +36,30 @@ Les arguments sont optionnels : `THEME_NAME` (par défaut `bootstrap`) et `TARGE
    │   └── images/        # Theme demo images and icons
    ```
 
-2. **Copier les fichiers du thème** sans modification
-- Copier tous les fichiers `.css` → `assets/theme-name/css/`
-- Copier tous les fichiers `.js` → `assets/theme-name/js/` (à titre de référence uniquement)
-- Copier tous les assets images → `assets/theme-name/images/`
-- NE PAS modifier ni renommer les fichiers CSS à cette étape
+2. **Copy theme files** without modification
+   - Copy all `.css` files → `assets/theme-name/css/`
+   - Copy all `.js` files → `assets/theme-name/js/` (for reference only)
+   - Copy all image assets → `assets/theme-name/images/`
+   - Do NOT modify or rename CSS files at this stage
 
-3. **Importer le CSS globalement** dans `src/main.tsx`
+3. **Import CSS globally** in `src/main.tsx`
    ```tsx
    import './assets/theme-name/css/main.css'
    // ... other theme CSS imports
    ```
 
-### Phase 2 : Conversion HTML → composants React
+### Phase 2: HTML to React Component Conversion
 
-1. **Analyser la structure HTML** des fichiers du thème
-  - Identifier les composants indépendants (navigation, carte, modal, etc.)
-  - Noter les dépendances de classes CSS
-  - Documenter les interactions JavaScript (gestionnaires de clic, animations)
+1. **Analyze HTML structure** from theme files
+   - Identify independent components (nav, card, modal, etc.)
+   - Note CSS class dependencies
+   - Document JavaScript interactions (click handlers, animations)
 
-2. **Créer la structure des composants** en respectant les noms de classes
-  - Chaque fichier de composant dans `src/components/`
-  - Conserver exactement tous les noms de classes CSS d'origine
-  - Utiliser des éléments HTML sémantiques correspondant au thème original
-  - **NE PAS ajouter de CSS personnalisé** — utiliser uniquement les classes du thème
+2. **Create component structure** respecting class names
+   - Each component file in `src/components/`
+   - Preserve all original CSS class names exactly
+   - Use semantic HTML elements matching original theme
+   - **Do NOT add custom CSS** — use existing theme classes only
 
 3. **Component template example**
    ```tsx
@@ -107,15 +91,15 @@ Les arguments sont optionnels : `THEME_NAME` (par défaut `bootstrap`) et `TARGE
    }
    ```
 
-### Phase 3 : Migration JavaScript/jQuery → hooks React
+### Phase 3: JavaScript/jQuery to React Hooks Migration
 
-1. **Identifier les animations et interactions** dans les fichiers JS originaux
-  - Gestionnaires de clic (afficher/masquer, basculer, développer)
-  - Animations de défilement/fondu
-  - Soumissions de formulaires
-  - Interactions modal/popup
+1. **Identify animations and interactions** in original JS files
+   - Click handlers (show/hide, toggle, expand)
+   - Scroll/fade animations
+   - Form submissions
+   - Modal/popup interactions
 
-2. **Créer des hooks personnalisés** pour la logique d'animation réutilisable
+2. **Create custom hooks** for reusable animation logic
    ```tsx
    // src/hooks/useThemeAnimation.ts
    /**
@@ -159,11 +143,11 @@ Les arguments sont optionnels : `THEME_NAME` (par défaut `bootstrap`) et `TARGE
    )
    ```
 
-### Phase 4 : Décomposition des composants (si > 600 lignes)
+### Phase 4: Component Decomposition (if > 600 lines)
 
-1. **Surveiller la taille des fichiers de composants**
-  - Garder chaque fichier de composant sous la barre des 600 lignes
-  - Identifier la logique qui peut être extraite
+1. **Monitor component file size**
+   - Keep individual component files under 600 lines max
+   - Identify logic that can be extracted
 
 2. **Create subdirectory for large components**
    ```
@@ -191,19 +175,19 @@ Les arguments sont optionnels : `THEME_NAME` (par défaut `bootstrap`) et `TARGE
    - API calls / data fetching → service hooks
    - Animation controllers → animation hooks
 
-### Phase 5 : Vérification de la qualité
+### Phase 5: Quality Verification
 
-Utilisez la [liste de contrôle qualité](./references/conversion-checklist.md) pour vérifier :
+Use the [Quality Checklist](./references/conversion-checklist.md) to verify:
 
-- [ ] Tous les noms de classes CSS correspondent exactement au thème original
-- [ ] Aucun CSS personnalisé ajouté en dehors des fichiers du thème
-- [ ] Toutes les animations migrées vers des hooks ou l'état des composants
-- [ ] Taille des fichiers de composants sous 600 lignes (avec décomposition si nécessaire)
-- [ ] Chaque composant possède un commentaire de documentation
-- [ ] Toutes les props correctement typées en TypeScript
-- [ ] Pas de collisions CSS avec d'autres composants
-- [ ] Assets du thème correctement importés dans main.tsx
-- [ ] ESLint sans avertissements
+- [ ] All CSS class names match original theme exactly
+- [ ] No custom CSS added beyond theme files
+- [ ] All animations migrated to hooks or component state
+- [ ] Component file size under 600 lines (with sub-decomposition as needed)
+- [ ] Each component has documentation comment
+- [ ] All props properly typed with TypeScript
+- [ ] No CSs collisions with other components
+- [ ] Theme assets properly imported in main.tsx
+- [ ] ESLint passes without warnings
 
 ## Example Output Structure
 
@@ -237,9 +221,9 @@ src/
 └── main.tsx (imports all theme CSS)
 ```
 
-## Patterns courants
+## Common Patterns
 
-### Gestion du basculement de classes CSS
+### Handling CSS Class Toggling
 ```tsx
 const [isActive, setIsActive] = useState(false)
 
@@ -250,7 +234,7 @@ return (
 )
 ```
 
-### Gestionnaires d'événements issus du JavaScript
+### Event Handlers from JavaScript
 ```tsx
 // Original: $('#element').on('click', function() { ... })
 // React:
@@ -270,29 +254,29 @@ const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 }
 ```
 
-## Conseils et bonnes pratiques
+## Tips & Best Practices
 
-1. **Conserver les noms** — Garder les noms de classes CSS d'origine tels quels
-2. **CSS immuable** — Ne pas modifier les fichiers CSS du thème après import
-3. **Tester visuellement** — Comparer les composants rendus avec le thème HTML d'origine
-4. **Documenter les animations** — Ajouter des commentaires expliquant le mapping vers les hooks
-5. **Amélioration progressive** — Ajouter l'interactivité React par-dessus un CSS stable
-6. **Tout typer** — Utiliser des interfaces TypeScript pour toutes les props
-7. **Surveiller le bundle** — Vérifier les doublons de CSS lors d'importations multiples
+1. **Preserve naming** - Keep original CSS class names exactly as-is
+2. **Immutable CSS** - Do not edit theme CSS files after import
+3. **Test visuals** - Compare rendered components with original HTML theme
+4. **Document animations** - Add comments explaining hook-based animation mappings
+5. **Progressive enhancement** - Add React interactivity on top of stable CSS
+6. **Type everything** - Use TypeScript interfaces for all props
+7. **Monitor bundle** - Watch for CSS duplication from multiple theme imports
 
-## Dépannage
+## Troubleshooting
 
-### Les classes CSS ne s'appliquent pas
-- Vérifier l'ordre d'import des CSS dans `main.tsx`
-- Vérifier que l'orthographe des classes correspond exactement à l'original
-- S'assurer qu'aucun CSS module n'interfère avec les styles globaux
+### CSS Classes Not Applying
+- Verify CSS import order in `main.tsx`
+- Check class name spelling matches original exactly
+- Ensure no CSS modules interfering with global styles
 
-### Les animations ne fonctionnent pas
-- Revoir la logique JavaScript d'origine dans les fichiers de référence
-- Mapper les gestionnaires jQuery vers des hooks React + setState
-- Tester via la timeline d'animations dans les DevTools du navigateur
+### Animations Not Working
+- Review original JavaScript logic in reference files
+- Map jQuery handlers to React hooks + setState
+- Test with browser DevTools animation timeline
 
-### Composant trop volumineux
-- Utiliser la répartition par taille pour identifier la logique extractible
-- Créer des hooks pour la gestion d'état
-- Séparer la présentation de la logique du conteneur
+### Component Too Large
+- Use file size breakdown to identify extractable logic
+- Create hooks for state management
+- Split presentation from container logic

@@ -1,21 +1,21 @@
 /**
- * MODÈLE DE DÉMARRAGE : Hook d'animation pour composants de thème
+ * STARTER TEMPLATE: Animation Hook for Theme Components
  *
- * Copiez ce modèle et adaptez-le pour votre animation spécifique.
- * Supprimez ce bloc de commentaire lorsque vous l'utilisez.
+ * Copy this template and customize for your specific animation.
+ * Delete this comment block when using.
  *
- * Modèles courants :
- * - Fondu (fade in/out)
- * - Glissement (slide up/down/left/right)
- * - Mise à l'échelle/zoom
- * - Rotation
- * - Basculement de visibilité de classe
+ * Common patterns:
+ * - Fade in/out
+ * - Slide up/down/left/right
+ * - Scale/zoom
+ * - Rotate
+ * - Toggle class visibility
  *
- * Points clés :
- * - Utiliser requestAnimationFrame pour des animations fluides
- * - Nettoyer timeouts/intervals dans le return de useEffect
- * - Utiliser useCallback pour éviter les re-créations inutiles
- * - Retourner l'état d'animation et les fonctions de contrôle
+ * Key points:
+ * - Use requestAnimationFrame for smooth animations
+ * - Clean up timeouts/intervals in useEffect return
+ * - Use useCallback to prevent unnecessary re-creation
+ * - Return animation state and trigger functions
  */
 
 import { useState, useCallback, useRef, useEffect } from "react";
@@ -23,15 +23,15 @@ import { useState, useCallback, useRef, useEffect } from "react";
 /**
  * useThemeAnimation
  *
- * Gère l'état d'animation fluide pour les composants du thème.
- * Mappe les animations jQuery du JS du thème vers des hooks React.
+ * Manages smooth animation state for theme components.
+ * Maps jQuery animations from original theme JS to React hooks.
  *
- * @param options Objet de configuration
- * @param options.duration Durée de l'animation en millisecondes (par défaut : 300)
- * @param options.delay Délai initial avant le démarrage de l'animation (par défaut : 0)
- * @param options.easing Fonction d'easing : 'linear' | 'ease-in' | 'ease-out' (par défaut : 'ease-out')
+ * @param options Configuration object
+ * @param options.duration Animation duration in milliseconds (default: 300)
+ * @param options.delay Initial delay before animation starts (default: 0)
+ * @param options.easing Easing function: 'linear' | 'ease-in' | 'ease-out' (default: 'ease-out')
  *
- * @returns Objet avec l'état d'animation et les fonctions de contrôle
+ * @returns Object with animation state and control functions
  *
  * @example
  * ```tsx
@@ -40,9 +40,9 @@ import { useState, useCallback, useRef, useEffect } from "react";
  *   easing: 'ease-out'
  * })
  *
- * // Utilisation dans un composant :
+ * // Use in component:
  * <div style={{ opacity: progress }} />
- * <button onClick={play}>Démarrer</button>
+ * <button onClick={play}>Start</button>
  * ```
  */
 

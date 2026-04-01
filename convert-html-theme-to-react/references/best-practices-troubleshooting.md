@@ -1,65 +1,65 @@
-# Bonnes pratiques & dépannage
+# Best Practices & Troubleshooting
 
-Les choses à faire et à éviter pour les conversions de thème vers React.
+Do's and don'ts for theme-to-React conversions.
 
-## À FAIRE ✅
+## DO's ✅
 
-- **Conserver les noms de classes CSS** — Copier exactement, ne pas renommer
-- **Tester visuellement** — Comparer côte à côte avec le thème HTML original
-- **Documenter les hypothèses** — Ajouter des commentaires sur le comportement du thème original
-- **Utiliser TypeScript** — Taper toutes les props, états et paramètres des hooks
-- **Importer le CSS globalement** — Charger les styles du thème dans `main.tsx` ou le composant racine
-- **Versionner les assets** — Committer tous les fichiers du thème copiés
-- **Vérifier la spécificité CSS** — S'assurer qu'il n'y a pas de conflits avec d'autres styles
-- **Créer des hooks** — Réutiliser la logique d'animation/état entre composants
-- **Ajouter des commentaires JSDoc** — Documenter les hooks et composants complexes
+- **Preserve CSS class names** - Copy them exactly, no renames
+- **Test visually** - Compare side-by-side with original HTML theme
+- **Document assumptions** - Add comments about original theme behavior
+- **Use TypeScript** - Type all props, state, hook parameters
+- **Import CSS globally** - Load theme styles in `main.tsx` or root component
+- **Version control assets** - Commit all copied theme files
+- **Review CSS specificity** - Ensure no conflicts with other styles
+- **Create hooks** - Reuse animation/state logic across components
+- **Add JSDoc comments** - Document complex hooks and components
 
-## À NE PAS FAIRE ❌
+## DON'Ts ❌
 
-- **Ne pas modifier les fichiers CSS du thème** — N'éditer que pour corriger de vrais bugs
-- **Ne pas ajouter de CSS supplémentaire** — Utiliser exclusivement les classes du thème
-- **Ne pas utiliser CSS Modules** — Le CSS global du thème risquerait de ne pas fonctionner
-- **Ne pas manipuler le DOM directement** — Utiliser l'état et les props React
-- **Ne pas oublier le nettoyage** — Ajouter les retours de `useEffect` pour le cleanup
-- **Ne pas hoister tout l'état au parent** — Garder l'état local au composant quand c'est possible
-- **Ne pas créer de composants massifs** — Surveiller la taille et décomposer tôt
-- **Ne pas sauter TypeScript** — Utiliser des types précis au lieu de `any`
+- **Don't modify theme CSS files** - Edit only if fixing genuine bugs
+- **Don't add extra CSS** - Use existing theme classes exclusively
+- **Don't use CSS Modules** - Global theme CSS won't work with CSS Modules
+- **Don't manipulate DOM directly** - Use React state and props
+- **Don't forget cleanup** - Add return statements in useEffect hooks
+- **Don't hoist all state to parent** - Keep component state local when possible
+- **Don't create massive Components** - Monitor file size and decompose early
+- **Don't skip TypeScript** - Use proper types instead of `any`
 
 ## Common Issues & Solutions
 
-### Problème : Les classes CSS ne s'appliquent pas
+### Issue: CSS Classes Not Applying
 
-**Symptôme** : Les styles n'apparaissent pas malgré des noms de classes corrects
+**Symptom**: Styles don't show up despite correct class names
 
-**Solutions** :
+**Solutions**:
 
-1. Vérifier l'ordre d'import des fichiers CSS dans `main.tsx`
-2. Vérifier que l'orthographe des classes correspond exactement au CSS du thème
-3. Chercher des conflits de spécificité CSS avec d'autres styles chargés
-4. S'assurer que les fichiers CSS utilisent des chemins relatifs corrects dans le dossier assets
+1. Check CSS file import order in `main.tsx`
+2. Verify class name spelling exactly matches theme CSS
+3. Check for CSS specificity conflicts with other loaded styles
+4. Ensure CSS files are relative paths in assets folder
 
 ```tsx
-// main.tsx - Ordre d'import correct
-import "./assets/theme-name/css/reset.css"; // Reset en premier
+// main.tsx - Correct import order
+import "./assets/theme-name/css/reset.css"; // Reset first
 import "./assets/theme-name/css/variables.css"; // Variables
-import "./assets/theme-name/css/components.css"; // Composants
-import "./assets/theme-name/css/theme.css"; // Thème
-import "./index.css"; // Styles de l'app en dernier
+import "./assets/theme-name/css/components.css"; // Components
+import "./assets/theme-name/css/theme.css"; // Theme
+import "./index.css"; // App styles last
 ```
 
-### Problème : Animations non fluides
+### Issue: Animations Not Smooth
 
-**Symptôme** : Les animations saccadent ou ne fonctionnent pas
+**Symptom**: Animations stutter or don't work
 
-**Solutions** :
+**Solutions**:
 
-1. Utiliser `requestAnimationFrame` plutôt que `setInterval`
-2. Vérifier qu'aucune re-render multiple n'est déclenchée
-3. Envelopper les fonctions d'animation dans `useCallback`
-4. Vérifier que le nettoyage a bien lieu dans `useEffect`
+1. Use `requestAnimationFrame` instead of `setInterval`
+2. Check for triggering multiple re-renders
+3. Wrap animation functions in `useCallback`
+4. Verify cleanup is happening in useEffect
 
 ```tsx
-// BON - Animation fluide
+// GOOD - Smooth animation
 const animate = useCallback(() => {
   const start = Date.now();
 
@@ -72,24 +72,24 @@ const animate = useCallback(() => {
   requestAnimationFrame(frame);
 }, []);
 
-// MAUVAIS - Animation saccadée
+// BAD - Choppy animation
 setInterval(() => {
   setOpacity((prev) => prev + 0.01);
 }, 16);
 ```
 
-### Problème : Fuite mémoire au démontage du composant
+### Issue: Component Has Memory Leak Issues
 
-**Symptôme** : La console signale des fuites mémoire lors du unmount
+**Symptom**: Console warns about memory leaks when unmounting
 
-**Solutions** :
+**Solutions**:
 
-1. Toujours nettoyer les écouteurs d'événements
-2. Effacer timeouts/intervals dans le return de `useEffect`
-3. Annuler les animations au démontage
+1. Always clean up event listeners
+2. Clear timeouts/intervals in useEffect return
+3. Cancel animations on unmount
 
 ```tsx
-// BON - Avec cleanup
+// GOOD - With cleanup
 useEffect(() => {
   const handler = () => {
     /* ... */
@@ -101,7 +101,7 @@ useEffect(() => {
   };
 }, []);
 
-// MAUVAIS - Pas de nettoyage
+// BAD - No cleanup
 useEffect(() => {
   window.addEventListener("scroll", () => {
     /* ... */
@@ -109,43 +109,43 @@ useEffect(() => {
 }, []);
 ```
 
-### Problème : Fichier de composant trop volumineux
+### Issue: Component File Too Large
 
-**Symptôme** : Un seul composant dépasse 600 lignes
+**Symptom**: Single component exceeds 600 lines
 
-**Solutions** :
+**Solutions**:
 
-1. Extraire des sous-composants → fichiers séparés
-2. Extraire des hooks → fichiers `useXxx.ts` séparés
-3. Extraire les types → fichier `types.ts` séparé
-4. Utiliser le pattern répertoire de composant avec `index.tsx`
+1. Extract sub-components → separate files
+2. Extract hooks → separate `useXxx.ts` files
+3. Extract types → separate `types.ts` file
+4. Use component directory pattern with index.tsx
 
 ```
-Avant : ComponentName.tsx (800 lignes)
+Before: ComponentName.tsx (800 lines)
 
-Après :
+After:
 ComponentName/
 ├── index.tsx (export)
-├── ComponentName.tsx (300 lignes)
+├── ComponentName.tsx (300 lines)
 ├── SubComponent1.tsx
 ├── SubComponent2.tsx
 ├── useComponentLogic.ts
 └── types.ts
 ```
 
-### Problème : Erreurs TypeScript avec les props
+### Issue: TypeScript Errors with Props
 
-**Symptôme** : Les props ne sont pas reconnues, de nombreuses erreurs de type
+**Symptom**: Props not being recognized, lots of type errors
 
-**Solutions** :
+**Solutions**:
 
-1. Définir clairement les interfaces de props
-2. Exporter les interfaces depuis un fichier `types`
-3. Utiliser des types spécifiques, éviter `any`
-4. Activer le mode strict TypeScript
+1. Define prop interfaces clearly
+2. Export interfaces from types file
+3. Use specific types, avoid `any`
+4. Enable strict TypeScript mode
 
 ```tsx
-// BON - Avec types
+// GOOD - With types
 interface CardProps {
   title: string;
   onClick: (id: string) => void;
@@ -157,117 +157,117 @@ export const Card: React.FC<CardProps> = ({
   onClick,
   className = "",
 }) => {
-  // Implémentation
+  // Implementation
 };
 
-// MAUVAIS - Avec any
+// BAD - With any
 export const Card: React.FC<any> = (props) => {
-  // Implémentation
+  // Implementation
 };
 ```
 
-### Problème : Dégradation des performances
+### Issue: Performance Degradation
 
-**Symptôme** : La page ralentit avec de nombreux composants du thème
+**Symptom**: Page slows down with many theme components
 
-**Solutions** :
+**Solutions**:
 
-1. Utiliser `React.memo` pour les composants qui n'ont pas besoin de mises à jour fréquentes
-2. Utiliser `useMemo` pour les calculs coûteux
-3. Charger en lazy le CSS du thème qui n'est pas immédiatement nécessaire
-4. Analyser la taille du bundle des assets du thème
+1. Use `React.memo` for components that don't need frequent updates
+2. Use `useMemo` for expensive calculations
+3. Lazy load theme CSS that's not immediately needed
+4. Analyze bundle size of theme assets
 
 ```tsx
-// BON - Mémoïsation pour éviter les re-renders
+// GOOD - Memoized to prevent re-renders
 export const ThemeCard = React.memo(({ title, content }: Props) => {
   return <div className="theme-card">{title}</div>;
 });
 
-// BON - Calcul mémoïsé
+// GOOD - Memoized calculation
 const memoizedValue = useMemo(() => {
   return expensiveCalculation(data);
 }, [data]);
 ```
 
-### Problème : Le design responsive casse
+### Issue: Responsive Design Breaking
 
-**Symptôme** : La disposition ne s'adapte pas aux mobiles/tablettes
+**Symptom**: Layout doesn't adapt to mobile/tablet
 
-**Solutions** :
+**Solutions**:
 
-1. Vérifier que les media queries CSS sont présentes dans les fichiers du thème importés
-2. Tester aux points de rupture réels
-3. Vérifier la balise meta viewport dans le HTML
-4. S'assurer que la taille de police de base est correctement définie
+1. Verify CSS media queries are in imported theme files
+2. Test at actual breakpoints
+3. Check viewport meta tag in HTML
+4. Ensure base font-size is set correctly
 
 ```html
-<!-- index.html - Requis pour le responsive -->
+<!-- index.html - Required for responsive -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 ```
 
-## Liste de validation avant déploiement
+## Validation Checklist Before Deployment
 
-- [ ] Exécuter `npm run lint` → 0 erreurs
-- [ ] Exécuter `npm run build` → s'exécute sans erreurs
-- [ ] Ouvrir les DevTools → pas d'erreurs ou avertissements dans la console
-- [ ] Vérifier l'onglet réseau → tous les CSS/JS chargés correctement
-- [ ] Tester les animations → fluides et réactives
-- [ ] Tester sur mobile → le layout responsive fonctionne
-- [ ] Audit Lighthouse → Core Web Vitals satisfaisants
-- [ ] Régression visuelle → correspond au design du thème original
+- [ ] Run `npm run lint` → 0 errors
+- [ ] Run `npm run build` → completes without errors
+- [ ] Open DevTools → no console errors or warnings
+- [ ] Check network tab → all CSS/JS loaded properly
+- [ ] Test animations → smooth and responsive
+- [ ] Test on mobile → responsive layout works
+- [ ] Lighthouse audit → Core Web Vitals good
+- [ ] Visual regression → matches original theme design
 
-## Outils de débogage
+## Debugging Tools
 
-### Inspecteur (DevTools)
+### Inspector (DevTools)
 
-1. Clic droit sur un élément → Inspecter
-2. Vérifier si les classes correctes sont appliquées
-3. Consulter les styles calculés
-4. Rechercher des règles CSS conflictuelles
+1. Right-click element → Inspect
+2. Check if correct classes applied
+3. Review computed styles
+4. Look for conflicting CSS rules
 
-### React DevTools
+### React Dev Tools
 
-1. Installer l'extension React DevTools
-2. Vérifier les props des composants dans l'onglet Elements
-3. Profiler les performances de rendu
-4. Suivre les changements d'état
+1. Install React DevTools extension
+2. Check component props in Elements tab
+3. Profile rendering performance
+4. Track state changes
 
-### Onglet Performance
+### Performance Tab
 
-1. DevTools → onglet Performance
-2. Enregistrer une interaction
-3. Rechercher les tâches longues et les goulets d'étranglement de rendu
-4. Identifier les chutes d'images d'animation
+1. DevTools → Performance tab
+2. Record interaction
+3. Look for long tasks and rendering bottlenecks
+4. Identify animation frame drops
 
-## Indicateurs de performance
+## Performance Metrics
 
-Suivre ces métriques pour les composants du thème :
+Track these for theme components:
 
-- **First Contentful Paint (FCP)** : < 1.8s
-- **Largest Contentful Paint (LCP)** : < 2.5s
-- **Cumulative Layout Shift (CLS)** : < 0.1
-- **Time to Interactive (TTI)** : < 3.8s
-- **Taille du bundle CSS** : < 50KB (après gzip)
+- **First Contentful Paint (FCP)**: < 1.8s
+- **Largest Contentful Paint (LCP)**: < 2.5s
+- **Cumulative Layout Shift (CLS)**: < 0.1
+- **Time to Interactive (TTI)**: < 3.8s
+- **CSS bundle size**: < 50KB (after gzip)
 
-Utiliser l'audit Lighthouse : `npm run build && npm run preview`
+Use Lighthouse audit: `npm run build && npm run preview`
 
-## Stratégies de test
+## Testing Strategies
 
-### Tests de régression visuelle
+### Visual Regression Testing
 
-1. Prendre des captures d'écran du thème HTML original
-2. Prendre des captures d'écran des composants React
-3. Comparer pixel par pixel
-4. Documenter les différences intentionnelles
+1. Take screenshots of original HTML theme
+2. Take screenshots of React components
+3. Compare pixel-by-pixel
+4. Document any intentional differences
 
-### Tests d'interaction
+### Interaction Testing
 
 ```typescript
-// Exemple : test d'interaction d'un composant
+// Example: Testing component interaction
 import { render, screen, userEvent } from '@testing-library/react'
 import { Card } from './Card'
 
-test('le gestionnaire de clic du Card est appelé avec les bonnes données', async () => {
+test('Card click handler called with correct data', async () => {
   const handleClick = vi.fn()
   render(<Card onClick={handleClick} />)
 
@@ -276,11 +276,11 @@ test('le gestionnaire de clic du Card est appelé avec les bonnes données', asy
 })
 ```
 
-### Tests d'animation
+### Animation Testing
 
 ```typescript
-// Tester les changements d'état d'une animation
-test("l'animation se termine correctement", async () => {
+// Test animation state changes
+test("Animation completes successfully", async () => {
   const { result } = renderHook(() => useAnimationFade());
 
   act(() => {
@@ -291,10 +291,10 @@ test("l'animation se termine correctement", async () => {
 });
 ```
 
-## Obtenir de l'aide
+## Getting Help
 
-- Vérifier les fichiers CSS du thème pour le comportement des classes d'origine
-- Se référer au balisage HTML original pour la structure
-- Consulter la console du navigateur pour les erreurs React/TypeScript
-- Utiliser React DevTools pour inspecter l'état des composants
-- Tester dans l'onglet Réseau des DevTools pour les problèmes de chargement CSS
+- Check theme CSS files for original class behaviors
+- Reference original HTML markup for structure
+- Review browser console for React/TypeScript errors
+- Use React DevTools to inspect component state
+- Test in browser DevTools Network tab for CSS loading issues

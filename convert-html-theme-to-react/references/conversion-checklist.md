@@ -1,83 +1,83 @@
-# Liste de contrôle pour la conversion Thème → React
+# Theme to React Conversion Checklist
 
-Complétez cette liste après chaque conversion pour garantir la qualité et la cohérence.
+Complete this checklist after each conversion to ensure quality and consistency.
 
-## Configuration des assets
+## Asset Setup
 
-- [ ] Création du répertoire `src/assets/[theme-name]/css/`
-- [ ] Création du répertoire `src/assets/[theme-name]/js/` (référence uniquement)
-- [ ] Création du répertoire `src/assets/[theme-name]/images/`
-- [ ] Tous les fichiers CSS copiés sans modification
-- [ ] Tous les fichiers JavaScript copiés dans le dossier de référence
-- [ ] Toutes les images copiées avec la structure de dossiers correcte
-- [ ] Imports CSS ajoutés dans `src/main.tsx`
+- [ ] Created `src/assets/[theme-name]/css/` directory
+- [ ] Created `src/assets/[theme-name]/js/` directory (reference only)
+- [ ] Created `src/assets/[theme-name]/images/` directory
+- [ ] All CSS files copied without modification
+- [ ] All JavaScript files copied to reference folder
+- [ ] All images copied with correct folder structure
+- [ ] CSS imports added to `src/main.tsx`
 
-## Structure des composants
+## Component Structure
 
-- [ ] Composants principaux créés dans `src/components/`
-- [ ] Noms des composants en PascalCase
-- [ ] Chaque composant a une interface TypeScript définie pour ses props
-- [ ] Toutes les props correctement typées (pas de `any`)
+- [ ] Main components created in `src/components/`
+- [ ] Component names follow PascalCase convention
+- [ ] Each component has defined TypeScript interface for props
+- [ ] All props properly typed (no `any` types)
 
-## Conservation des classes CSS
+## CSS Class Preservation
 
-- [ ] Tous les noms de classes CSS originaux préservés exactement
-- [ ] Aucun CSS personnalisé ajouté en dehors des fichiers du thème
-- [ ] Pas de changement ou de renommage de classes
-- [ ] Spécificité CSS respectée comme dans le thème original
-- [ ] Cohérence visuelle testée avec le thème HTML original
+- [ ] All original CSS class names preserved exactly
+- [ ] No custom CSS added beyond theme files
+- [ ] No class name changes or renaming
+- [ ] CSS specificity respected from original theme
+- [ ] Tested visual consistency with original HTML theme
 
-## Migration des animations et interactions
+## Animation & Interaction Migration
 
-- [ ] Animations JavaScript documentées dans des hooks
-- [ ] Gestionnaires jQuery convertis en gestionnaires d'événements React
-- [ ] Hooks personnalisés créés pour la logique d'animation réutilisable
-- [ ] `useState` et `useCallback` utilisés correctement
-- [ ] Aucune manipulation directe du DOM en dehors de React
+- [ ] JavaScript animations documented in hooks
+- [ ] jQuery handlers converted to React event handlers
+- [ ] Custom hooks created for reusable animation logic
+- [ ] useState or useCallback used appropriately
+- [ ] No direct DOM manipulation outside of React
 
-## Taille et organisation des composants
+## Component Size & Organization
 
-- [ ] Création de sous-composants pour les fichiers proches de 600 lignes
-- [ ] Création de sous-répertoires avec `index.tsx` pour les fonctionnalités complexes
-- [ ] Chaque sous-composant a un commentaire d'en-tête de documentation
-- [ ] Logique d'animation/état extraite dans des fichiers `useXxx`
-- [ ] Imports des composants parents propres et organisés
+- [ ] Created sub-components for files approaching 600 lines
+- [ ] Created subdirectories with index.tsx for complex features
+- [ ] Each sub-component has header documentation comment
+- [ ] Extracted animation/state logic into useXxx hook files
+- [ ] Parent component imports are clean and organized
 
-## Qualité du code
+## Code Quality
 
-- [ ] Avertissements/erreurs ESLint : aucun
-- [ ] Compilateur TypeScript passe sans erreurs
-- [ ] Tous les composants correctement exportés dans les fichiers index
-- [ ] Pas d'erreurs ou avertissements dans la console du navigateur
-- [ ] Attributs d'accessibilité préservés (`alt`, `role`, `aria-*`)
+- [ ] No ESLint warnings or errors
+- [ ] TypeScript compiler passes without errors
+- [ ] All components properly exported in index files
+- [ ] No console errors or warnings in browser
+- [ ] Accessibility attributes preserved (alt, role, aria-\*)
 
 ## Documentation
 
-- [ ] Chaque composant a un commentaire d'en-tête de documentation
-- [ ] Hooks documentés avec des commentaires JSDoc
-- [ ] Les interfaces de props incluent des descriptions
-- [ ] Le comportement des animations expliqué dans les commentaires
-- [ ] Exemples créés dans Storybook si applicable
+- [ ] Each component has header documentation comment
+- [ ] Hooks documented with JSDoc comments
+- [ ] Props interfaces include descriptions
+- [ ] Animation behavior explained in comments
+- [ ] Created examples in Storybook if applicable
 
-## Tests
+## Testing
 
-- [ ] Composants rendus correspondent visuellement au thème original
-- [ ] Toutes les animations et interactions fonctionnelles
-- [ ] Points de rupture responsive fonctionnent correctement
-- [ ] Testé dans différents navigateurs (Chrome, Firefox, Safari)
-- [ ] Pas de fuites mémoire dans les hooks (fonctions de nettoyage ajoutées)
+- [ ] Rendered components visually match original theme
+- [ ] All animations and interactions functional
+- [ ] Responsive breakpoints working correctly
+- [ ] tested in different browsers (Chrome, Firefox, Safari)
+- [ ] No memory leaks in hooks (cleanup functions added)
 
 ## Performance
 
-- [ ] Fichiers CSS chargés efficacement (pas de duplication)
-- [ ] Images optimisées (pas d'assets surdimensionnés)
-- [ ] Composants React n'entraînent pas de re-renders inutiles
-- [ ] Modules Node correctement tree-shakés lors du build
+- [ ] CSS files loaded efficiently (no duplication)
+- [ ] Images optimized (no oversized assets)
+- [ ] React components don't cause unnecessary re-renders
+- [ ] Node modules properly tree-shaken in build
 
-## Vérification finale
+## Final Verification
 
-- [ ] `npm run dev` démarre sans erreurs
-- [ ] `npm run build` s'exécute avec succès
-- [ ] `npm run lint` ne signale pas d'erreurs
-- [ ] Tests de régression visuelle passés
-- [ ] Prêt pour la revue de code et la fusion
+- [ ] `npm run dev` starts without errors
+- [ ] `npm run build` completes successfully
+- [ ] `npm run lint` shows no errors
+- [ ] Visual regression testing passed
+- [ ] Ready for code review and merge

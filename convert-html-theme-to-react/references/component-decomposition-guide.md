@@ -1,19 +1,19 @@
-# Guide de décomposition des composants
+# Component Decomposition Guide
 
-Stratégie pour fractionner les gros composants de thème lorsqu'ils dépassent 600 lignes.
+Strategy for breaking down large theme components when they exceed 600 lines.
 
-## Quand décomposer
+## When to Decompose
 
-Surveiller la taille des fichiers de composants et décomposer lorsque :
+Monitor component file size and decompose when:
 
-- Un fichier de composant dépasse 600 lignes
-- Plusieurs responsabilités peuvent être séparées proprement
-- Les sous-composants sont réutilisables indépendamment
-- La logique d'état peut être extraite en hooks personnalisés
+- Single component file exceeds 600 lines
+- Multiple responsibilities can be cleanly separated
+- Sub-components are independently reusable
+- State logic can be extracted to custom hooks
 
-## Stratégie de décomposition
+## Decomposition Strategy
 
-### Niveau 1 : Extraction simple (économie de 100–200 lignes)
+### Level 1: Simple Extraction (100-200 lines saved)
 
 **Before:**
 
@@ -35,7 +35,7 @@ CardComponent/
 └── CardFooter.tsx (100 lines)
 ```
 
-### Niveau 2 : Extraction de logique (économie de 300+ lignes)
+### Level 2: Logic Extraction (300+ lines saved)
 
 **Before:**
 
@@ -59,9 +59,9 @@ ComplexFormComponent/
 └── FormSection.tsx (100 lines - grouping)
 ```
 
-## Modèle de structure de fichiers
+## File Structure Template
 
-Lors de la décomposition d'un composant, suivez cette structure :
+When decomposing a component, follow this structure:
 
 ```
 src/components/FeatureName/
@@ -78,9 +78,9 @@ src/components/FeatureName/
 └── types.ts                     # Shared TypeScript interfaces
 ```
 
-## Exemple : décomposer une fonctionnalité de 700 lignes
+## Example: Decomposing a 700-line Feature
 
-### Structure originale
+### Original Structure
 
 ```tsx
 // OLD: ProductCard.tsx (700 lines)
@@ -373,23 +373,23 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 }
 ```
 
-## Résultat
+## The Result
 
-- **Fichier original** : 700 lignes, difficile à parcourir
-- **Nouvelle structure** :
-  - ProductCard.tsx : 80 lignes
-  - ProductImage.tsx : 35 lignes
-  - ProductInfo.tsx : 45 lignes
-  - useProductCardState.ts : 40 lignes
-  - useProductLogic.ts : 60 lignes
-  - index.tsx : 5 lignes
-  - types.ts : 20 lignes
+- **Original file**: 700 lines, hard to navigate
+- **New structure**:
+  - ProductCard.tsx: 80 lines
+  - ProductImage.tsx: 35 lines
+  - ProductInfo.tsx: 45 lines
+  - useProductCardState.ts: 40 lines
+  - useProductLogic.ts: 60 lines
+  - index.tsx: 5 lines
+  - types.ts: 20 lines
 
-Chaque fichier est désormais ciblé, testable et sous 100 lignes. L'ensemble est bien organisé et maintenable.
+Each file is now focused, testable, and under 100 lines. Total is well-organized and maintainable.
 
-## Matrice de décision
+## Decision Matrix
 
-Utilisez ceci pour décider comment décomposer :
+Use this to decide how to decompose:
 
 | Scenario                     | Strategy                        |
 | ---------------------------- | ------------------------------- |
@@ -401,15 +401,15 @@ Utilisez ceci pour décider comment décomposer :
 | Conditional rendering blocks | Each gets own component         |
 | Form with many fields        | Create `<FormField />` wrapper  |
 
-## Éviter la sur-décomposition
+## Avoid Over-Decomposition
 
-**Ne pas créer un composant si :**
+**Don't create a component if:**
 
-- Il ne contient que 2–3 lignes de JSX simple
-- Il n'est utilisé qu'à un seul endroit localement
-- Il ajoute de la verbosité d'import sans clarté
+- It's only 2-3 lines of simple JSX
+- It's used in only one place locally
+- It adds import clutter without clarity
 
-Exemple de **sur-décomposition à éviter** :
+Example of **over-decomposition to avoid**:
 
 ```tsx
 // BAD - Too granular
@@ -418,7 +418,7 @@ Exemple de **sur-décomposition à éviter** :
 <Icon name={icon} />             // Just renders <span>
 ```
 
-Exemple de **décomposition appropriée** :
+Example of **appropriate decomposition**:
 
 ```tsx
 // GOOD - Clear separation of concerns

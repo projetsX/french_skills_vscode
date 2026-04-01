@@ -1,23 +1,23 @@
 /**
- * MODÈLE DE DÉMARRAGE : Composant React issu d'un thème HTML
- *
- * Copiez ce modèle et adaptez-le pour votre composant spécifique.
- * Supprimez ce bloc de commentaire lorsque vous l'utilisez.
- *
- * Points clés :
- * - Conserver exactement tous les noms de classes CSS existants
- * - L'interface des props définit tous les points de personnalisation
- * - Utiliser uniquement Tailwind ou les classes CSS du thème — PAS de CSS personnalisé
- * - Ajouter un commentaire JSDoc expliquant le rôle du composant
- * - Importer des hooks pour la gestion des animations/état
+ * STARTER TEMPLATE: React Component from HTML Theme
+ * 
+ * Copy this template and customize for your specific component.
+ * Delete this comment block when using.
+ * 
+ * Key points:
+ * - Preserve all existing CSS class names exactly
+ * - Props interface defines all customization points
+ * - Use Tailwind or theme CSS classes only - NO custom CSS
+ * - Add JSDoc comment explaining the component's role
+ * - Import hooks for animations/state management
  */
 
 import React, { useCallback, useState } from 'react'
 
 /**
- * Props du composant
- * Définir toutes les props via une interface TypeScript
- * Inclure des descriptions pour les types complexes
+ * Component Props
+ * Define all props with TypeScript interface
+ * Include descriptions for complex types
  */
 interface ThemeComponentProps {
     /** Main heading text */
@@ -41,16 +41,16 @@ interface ThemeComponentProps {
 
 /**
  * ThemeComponent
- *
- * Affiche un composant du thème avec titre, description et gestion du clic.
- * Correspond au balisage HTML original 'component-class-name' du thème.
- *
+ * 
+ * Displays a theme component with title, description, and click handling.
+ * Maps to original HTML markup 'component-class-name' from theme.
+ * 
  * @example
  * ```tsx
  * <ThemeComponent
- *   title="Mon titre"
- *   description="Ma description"
- *   onClick={() => console.log('cliqué')}
+ *   title="My Title"
+ *   description="My description"
+ *   onClick={() => console.log('clicked')}
  *   variant="primary"
  * />
  * ```
