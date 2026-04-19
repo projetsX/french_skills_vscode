@@ -1,5 +1,5 @@
 ---
-name: upgrade-htmx-2-to-4
+name: upgrade-htmx-2-to-4-alpha
 description: 'Aide à migrer un site utilisant HTMX de la version 2 à la version 4. Vérifie les changements dans la documentation officielle et propose la mise à jour des références locales.'
 argument-hint: '[OPTIONS] - Options pour la vérification et la mise à jour locale'
 user-invocable: true
