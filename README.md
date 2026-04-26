@@ -17,8 +17,10 @@ Collection de skills et scripts pour l'intégration avec GitHub Copilot / VS Cod
 1. Sous windows, copier le dossier des skills dans votre dossier de profil user de VSCODE. EX : C:\Users\nom_utilisateur\AppData\Roaming\Code\User\copilot\skills
 2. VS Code chargera automatiquement les skills quand vous les appellerez (ex : /refactor-css-mdn)
 
-IMPORTANT : certains skills nécessitent le serveur MCP context7, voir ici pour l'installation : https://github.com/upstash/context7#installation mais aussi le serveur MCP de Chrome, 
+IMPORTANT : 
+- Certains skills nécessitent le serveur MCP context7, voir ici pour l'installation : https://github.com/upstash/context7#installation mais aussi le serveur MCP de Chrome, 
 voici ici l'installation : https://developer.chrome.com/blog/chrome-devtools-mcp?hl=fr
+- Le skill `creer-utilisateurs-test-php` nécessite la librairie PHP 'DelightPHP' ([text](https://github.com/delight-im/php-auth))
 
 ## Contribuer
 
