@@ -1,6 +1,7 @@
 # French Skills VSCode
 
-Collection de skills et scripts pour l'intégration avec GitHub Copilot / VS Code ou autre IDE. Ce dépôt contient des outils, guides et modèles pour aider au refactoring CSS, à la conversion de thèmes HTML vers React, aux tests d'interface web, et autres tâches connexes.
+Collection de skills et scripts pour l'intégration avec Claude Desktop, GitHub Copilot / VS Code ou autre IDE. 
+Ce dépôt contient des outils, guides et modèles pour aider au refactoring CSS, à la conversion de thèmes HTML vers React, aux tests d'interface web, et autres tâches connexes.
 
 ## Structure
 
@@ -14,8 +15,16 @@ Collection de skills et scripts pour l'intégration avec GitHub Copilot / VS Cod
 
 ## Utilisation
 
+POUR VSCODE :
+
 1. Sous windows, copier le dossier des skills dans votre dossier de profil user de VSCODE. EX : C:\Users\nom_utilisateur\AppData\Roaming\Code\User\copilot\skills
 2. VS Code chargera automatiquement les skills quand vous les appellerez (ex : /refactor-css-mdn)
+
+POUR CLAUDE DESKTOP :
+
+1. Aller dans le menu "Compétences"
+2. Choisir Aller dans > Créer une compétence > Téléverser une compétence
+3. Choisir la compétence du sous dossier "/zip" du repo contenant les skills au format ZIP que vous souhaitez importer
 
 IMPORTANT : 
 - Certains skills nécessitent le serveur MCP context7, voir ici pour l'installation : https://github.com/upstash/context7#installation mais aussi le serveur MCP de Chrome, 
